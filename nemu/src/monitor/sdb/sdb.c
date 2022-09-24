@@ -19,6 +19,8 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+#include <memory/paddr.h>
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -70,17 +72,42 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
   /* extract the first argument */
   char *arg = strtok(NULL, " ");
-
+  /*no argument*/
   if (arg == NULL )
-    printf("'info' need an argument 'r' or 'w'");
-  else if (strcmp(arg,"r") == 0){
+    printf("'info' need an argument 'r' or 'w'\n");
+  else if (strcmp(arg,"r") == 0)
     isa_reg_display();
-  }
-  else if (strcmp(arg,"w") == 0){
+  else if (strcmp(arg,"w") == 0)
     //TODO//
     return 0 ;
-  }
   return 0 ;
+}
+
+static int cmd_x(char *args) {                //x N EXPR
+  /* extract the first argument */
+  char *N = strtok(NULL, " ");
+  char *EXPR = strtok(NULL, " ");
+//printf("N=%s\n", N);
+//printf("EXPR=%s\n", EXPR);
+  int cnt ;
+  int addr;
+  sscanf(N, "%u", &cnt);
+  sscanf(EXPR, "%x", &addr);
+  /* address */
+  uint8_t *pos = guest_to_host(addr);
+//printf("'%x'\n",addr);
+//printf("'%p'\n",pos);
+//printf("'%x'\n",*pos);
+//printf("'%p'\n",pos+1);
+//printf("'%x'\n",*(pos+1));
+  for (int i = 0; i<= cnt; i++){
+    printf("%x:\t%02x \t%02x \t%02x \t%02x\n",addr , *pos, *(pos+1), *(pos+2), *(pos+3));
+    pos += 4,addr += 4;
+//printf("'%x'\n",*pos);
+//printf("'%p'\n",pos);
+  }
+
+  return 0;
 }
 
 static int cmd_help(char *args);
@@ -94,7 +121,8 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute N instructions in a signle step. N is 1 by default", cmd_si},
-  { "info", "Print the information of registers(r) or watchpoints(w)", cmd_info}
+  { "info", "Print the information of registers(r) or watchpoints(w)", cmd_info},
+  { "x", "Scan memory", cmd_x}
   /* TODO: Add more commands */
 
 };
