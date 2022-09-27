@@ -26,6 +26,10 @@ static int is_batch_mode = false;
 void init_regex();
 void init_wp_pool();
 
+extern void watchpoints_add(char *e);
+extern void watchpoints_del(int id);
+extern void watchpoints_display();
+
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
   static char *line_read = NULL;
@@ -78,8 +82,7 @@ static int cmd_info(char *args) {
   else if (strcmp(arg,"r") == 0)
     isa_reg_display();
   else if (strcmp(arg,"w") == 0)
-    //TODO//
-    return 0 ;
+    watchpoints_display();
   return 0 ;
 }
 
@@ -110,6 +113,40 @@ static int cmd_x(char *args) {                //x N EXPR
   return 0;
 }
 
+static int cmd_p(char *args) {
+  bool success = true;
+  //calculate expression 
+  uint64_t ret = expr(args, &success);
+  //check if argument has errors 
+  if (success)
+    printf("%s = %lx(%lu)\n", args, ret, ret);
+  else
+    printf("%s: Syntax Error.\n", args);
+  return 0;
+  /*bool success;
+  word_t result = expr(args, &success);
+  if(success)
+    printf("%s = %lu\n",args ,result);
+  else
+    printf("%s error\n",args);
+  return 0;*/
+}
+
+static int cmd_w(char *args) {
+	watchpoints_add(args);
+	return 0;
+}
+
+static int cmd_d(char *args){
+	char *arg = strtok(NULL, " ");
+	unsigned id;
+	if (arg == NULL || sscanf(arg, "%u", &id) != 1)
+		printf("'%s' must be an integer.\n", arg);
+	/* free watchpoint */
+	watchpoints_del(id);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -122,7 +159,10 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute N instructions in a signle step. N is 1 by default", cmd_si},
   { "info", "Print the information of registers(r) or watchpoints(w)", cmd_info},
-  { "x", "Scan memory", cmd_x}
+  { "x", "Scan memory", cmd_x},
+  { "p", "calculate the expression", cmd_p},
+  { "d", "d N", cmd_d},
+  { "w", "w EXPR", cmd_w},
   /* TODO: Add more commands */
 
 };
