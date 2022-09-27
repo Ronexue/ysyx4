@@ -3,8 +3,8 @@ all:
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator -Wall --cc --exe --build --trace /home/srx/verilator-test/ON_OFF/sim_main.cpp /home/srx/verilator-test/ON_OFF/onoff.v
-	/home/srx/verilator-test/ON_OFF/obj_dir/Vonoff
-	gtkwave /home/srx/verilator-test/ON_OFF/obj_dir/onoff.vcd
+	verilator -Wall --cc --exe --build --trace csrc/main.cpp vsrc/test.v
+	/obj_dir/Vtest
+	gtkwave ./obj_dir/test.vcd
 
 include ../Makefile
