@@ -5,6 +5,8 @@
 #include "Vtop___024root.h"
 #include "Vtop__Syms.h"
 
+#include "verilated_dpi.h"
+
 //==========
 
 
@@ -41,23 +43,36 @@ void Vtop___024root___initial__TOP__1(Vtop___024root* vlSelf) {
     VL_WRITEF("hello world\n");
 }
 
+void Vtop___024unit____Vdpiimwrap_c_trap_TOP____024unit(CData/*0:0*/ done);
+
 void Vtop___024root___settle__TOP__3(Vtop___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___settle__TOP__3\n"); );
     // Body
-    if (VL_LIKELY((0x13U == (0x7fU & vlSelf->instr_i)))) {
+    vlSelf->top__DOT__immI = (((- (QData)((IData)((vlSelf->instr_i 
+                                                   >> 0x1fU)))) 
+                               << 0xcU) | (QData)((IData)(
+                                                          (vlSelf->instr_i 
+                                                           >> 0x14U))));
+    vlSelf->top__DOT__my_if__DOT__dnpc = (4ULL + vlSelf->top__DOT__my_if__DOT__now_pc);
+    vlSelf->pc = vlSelf->top__DOT__my_if__DOT__now_pc;
+    if ((0x13U == (0x7fU & vlSelf->instr_i))) {
         if (VL_LIKELY((0U == (7U & (vlSelf->instr_i 
                                     >> 0xcU))))) {
             vlSelf->top__DOT__wen = 1U;
         } else {
             VL_WRITEF("no\n");
         }
+    } else if (VL_LIKELY((0x73U == (0x7fU & vlSelf->instr_i)))) {
+        if (VL_LIKELY((1ULL == vlSelf->top__DOT__immI))) {
+            Vtop___024unit____Vdpiimwrap_c_trap_TOP____024unit(1U);
+        } else {
+            VL_WRITEF("no\n");
+        }
     } else {
         VL_WRITEF("no\n");
     }
-    vlSelf->top__DOT__my_if__DOT__dnpc = (4ULL + vlSelf->top__DOT__my_if__DOT__now_pc);
-    vlSelf->pc = vlSelf->top__DOT__my_if__DOT__now_pc;
     vlSelf->top__DOT__my_ex__DOT__res = (((0U == (0x1fU 
                                                   & (vlSelf->instr_i 
                                                      >> 0xfU)))
@@ -66,13 +81,7 @@ void Vtop___024root___settle__TOP__3(Vtop___024root* vlSelf) {
                                           [(0x1fU & 
                                             (vlSelf->instr_i 
                                              >> 0xfU))]) 
-                                         + (((- (QData)((IData)(
-                                                                (vlSelf->instr_i 
-                                                                 >> 0x1fU)))) 
-                                             << 0xcU) 
-                                            | (QData)((IData)(
-                                                              (vlSelf->instr_i 
-                                                               >> 0x14U)))));
+                                         + vlSelf->top__DOT__immI);
 }
 
 void Vtop___024root___eval_initial(Vtop___024root* vlSelf) {
@@ -107,6 +116,7 @@ void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->rst = VL_RAND_RESET_I(1);
     vlSelf->instr_i = VL_RAND_RESET_I(32);
     vlSelf->pc = VL_RAND_RESET_Q(64);
+    vlSelf->top__DOT__immI = VL_RAND_RESET_Q(64);
     vlSelf->top__DOT__immS = VL_RAND_RESET_Q(64);
     vlSelf->top__DOT__immJ = VL_RAND_RESET_Q(64);
     vlSelf->top__DOT__immB = VL_RAND_RESET_Q(64);

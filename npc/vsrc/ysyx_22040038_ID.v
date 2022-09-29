@@ -1,6 +1,9 @@
 /* verilator lint_off DECLFILENAME */
 /* verilator lint_off UNUSED */
 /* verilator lint_off UNDRIVEN */
+
+import "DPI-C" function void c_trap(input bit done);
+
 module ysyx_22040038_ID(
     input  [31:0] instr_i,
     output [6:0]  op,
@@ -28,6 +31,12 @@ module ysyx_22040038_ID(
             7'b0010011: begin
                     case(func3)
                         3'b000: begin wen = 1; end
+                        default: $display("no");
+                    endcase
+            end
+            7'b1110011: begin
+                    case(immI)
+                        1: begin c_trap(1); end
                         default: $display("no");
                     endcase
             end
