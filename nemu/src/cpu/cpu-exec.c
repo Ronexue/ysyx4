@@ -34,6 +34,11 @@ int ringptr = 15;
 char ringbuf[16][128];
 #endif
 
+#ifdef CONFIG_FTRACE
+void ftrace_record(uint64_t pc, uint64_t addr, bool is_return);
+void ftrace_output();
+#endif
+
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
@@ -59,6 +64,17 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
   isa_exec_once(s);
+#ifdef CONFIG_FTRACE
+	uint32_t finst = s->isa.inst.val;
+	if (finst == 0x00008067) {
+		// ret: jalr x0, 0(x1)
+	  ftrace_record(pc, pc, true);
+	} else if (BITS(finst, 6, 0) == 0x6f && BITS(finst, 11, 7) != 0) {
+		ftrace_record(pc, s->dnpc, false);
+	}	else if (BITS(finst, 6, 0) == 0x67 && BITS(finst, 11, 7) != 0) {
+		ftrace_record(pc, s->dnpc, false);
+	}
+#endif
   cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
@@ -139,7 +155,12 @@ void cpu_exec(uint64_t n) {
 				printf("%s\n", ringbuf[i]);
 			}
 			printf("\n");
-#endif    
+#endif
+#ifdef CONFIG_FTRACE
+			printf("========== Ftrace Result ==========\n");
+			ftrace_output();
+			printf("\n");
+#endif   
     case NEMU_END:
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
