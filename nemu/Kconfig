@@ -161,9 +161,14 @@ config FTRACE
 	bool "Enable function tracer"
 	default n
 
+config DTRACE
+  depends on TRACE && ENGINE_INTERPRETER
+	bool "Enable device tracer"
+	default n
+
 config WATCHPOINT
-bool "Enable watchpoints"
-default n
+  bool "Enable watchpoints"
+  default n
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
