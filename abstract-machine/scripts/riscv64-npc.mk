@@ -24,5 +24,4 @@ image: $(IMAGE).elf
 NPC_HOME = ~/ysyx-workbench/npc
 
 run: image
-	cp $(IMAGE).bin $(NPC_HOME)/image.bin
-	$(MAKE) -C $(NPC_HOME) sim
+	$(NPC_HOME)/obj_dir/Vtop +trace $(IMAGE).bin
