@@ -25,3 +25,8 @@ NPC_HOME = ~/ysyx-workbench/npc
 
 run: image
 	$(NPC_HOME)/obj_dir/Vtop +trace $(IMAGE).bin
+
+###########调试出波形不成功###########
+#run: image
+#	cp $(IMAGE).bin $(NPC_HOME)/image.bin
+#	$(MAKE) -C $(NPC_HOME) sim

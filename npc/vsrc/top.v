@@ -163,7 +163,7 @@ endmodule
 
 module adder(
 	input  [63: 0] a, b,
-	input          cin,
+	input  cin,
 	output [63: 0] f,
 	output         OF, SF, ZF, CF
 );
@@ -387,7 +387,7 @@ wire Store   ;
 wire Btype   ;
 wire jal     ;
 wire jalr    ;
-wire Env    ;
+wire Env     ;
 decodeOP decodeOP0(
 	.OP(OP)            ,
 	.Rtype(Rtype)      ,
@@ -586,7 +586,7 @@ module decodeOP(
 	output Btype     ,
 	output jal       ,
 	output jalr      ,
-		output Env
+	output Env
 );
 
 assign Rtype    = ~OP[6] &  OP[5] &  OP[4] & ~OP[3] & ~OP[2] &  OP[1] &  OP[0]; // R - type         0110011

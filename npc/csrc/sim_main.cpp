@@ -3,6 +3,8 @@
 #include <assert.h>
 #include "Vtop.h"
 #include "verilated.h"
+#include "verilated_vcd_c.h"
+
 #include "color.h"
 
 #include "svdpi.h"
@@ -44,6 +46,11 @@ int main(int argc, char**argv, char**env) {
     VerilatedContext*contextp = new VerilatedContext;
     contextp->traceEverOn(true);
     contextp->commandArgs(argc, argv);
+
+/*     VerilatedVcdC* tfp = new VerilatedVcdC;
+    Vtop*top = new Vtop{contextp};
+    top->trace(tfp, 99);
+    tfp->open("obj_dir/top.vcd"); */
     
     printf("argv:\n");
     for(int i = 0; i < argc; i++)
@@ -67,7 +74,7 @@ int main(int argc, char**argv, char**env) {
         IMEM[5] = 0x00100073;
     }
 
-    Vtop*top = new Vtop{contextp};
+//    Vtop*top = new Vtop{contextp};
     contextp->timeInc(1); 
     top->clk = 0;
     top->rst = 1;
@@ -86,9 +93,14 @@ int main(int argc, char**argv, char**env) {
         printf(ASNI_FG_YELLOW "Next status: clk = %d, rst = %d, pc = %016lx, instr = %08x\n" ASNI_NONE, top->clk, top->rst, top->pc, top->instr_i);
         top->eval();
         cnt++;
+
+//        tfp->dump(contextp->time());
+
     }
     delete top;
     delete contextp;
+
+//    tfp->close();
 
     if(cpu_gpr[10] == 0)
         printf(ASNI_FG_GREEN "HIT GOOD TRAP!" ASNI_NONE);

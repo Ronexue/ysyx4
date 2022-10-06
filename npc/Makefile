@@ -1,4 +1,5 @@
 VFILES := $(wildcard vsrc/*.v)
+#CFILES := $(wildcard csrc/*.cpp)
 VERILATOR = verilator
 # Generate C++ in executable form
 VERILATOR_FLAGS += -cc --exe --build --top-module top
@@ -20,6 +21,7 @@ VERILATOR_FLAGS += --trace
 #VERILATOR_FLAGS += --gdbbt
 
 # Input files for Verilator
+#VERILATOR_INPUT = $(VFILES) $(CFILES)
 VERILATOR_INPUT = $(VFILES) csrc/sim_main.cpp
 
 all:
@@ -29,7 +31,7 @@ sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
 	obj_dir/Vtop
-#	gtkwave ./obj_dir/vtop.vcd
+#	gtkwave ./obj_dir/top.vcd
 
 clean:
 	rm -rf logs

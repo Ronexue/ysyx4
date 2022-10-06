@@ -23,7 +23,18 @@ static inline int check_reg_idx(int idx) {
   return idx;
 }
 
+static inline int check_csr_idx(int idx) {
+  switch (idx) {
+  case 0x305: return 0; // mtvec
+  case 0x341: return 1; // mepc
+  case 0x300: return 2; // mstatus
+  case 0x342: return 3; // mcause
+  }
+  panic("csr error, reading %d", idx);
+}
+
 #define gpr(idx) (cpu.gpr[check_reg_idx(idx)])
+#define csr(idx) (cpu.csr[check_csr_idx(idx)])
 
 static inline const char* reg_name(int idx, int width) {
   extern const char* regs[];
