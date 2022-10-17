@@ -19,7 +19,8 @@
 #include <common.h>
 
 enum {
-  mtvec, mepc, mstatus, mcause
+  mtvec, mepc, mstatus, mcause,
+  csr_regnum
 };
 
 typedef struct {

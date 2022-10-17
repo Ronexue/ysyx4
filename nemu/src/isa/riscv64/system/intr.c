@@ -16,13 +16,13 @@
 #include <isa.h>
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
-  cpu.csr[1] = epc;         //mepc
-  cpu.csr[3] = NO;          //mcause
+  cpu.csr[mepc] = epc;         //mepc
+  cpu.csr[mcause] = NO;          //mcause
 #ifdef CONFIG_ETRACE
   printf("[ETrace] Exception %lx: mtvec = 0x%016lx, mepc = 0x%016lx, mstatus = 0x%016lx, mcause = 0x%016lx\n",
     NO, cpu.csr[mtvec], cpu.csr[mepc], cpu.csr[mstatus], cpu.csr[mcause]);
 #endif
-  return cpu.csr[0];        //mtvec
+  return cpu.csr[mtvec];        //mtvec
 }
 
 word_t isa_query_intr() {

@@ -46,9 +46,9 @@ int main(int argc, char**argv, char**env) {
     VerilatedContext*contextp = new VerilatedContext;
     contextp->traceEverOn(true);
     contextp->commandArgs(argc, argv);
+    Vtop*top = new Vtop{contextp};
 
 /*     VerilatedVcdC* tfp = new VerilatedVcdC;
-    Vtop*top = new Vtop{contextp};
     top->trace(tfp, 99);
     tfp->open("obj_dir/top.vcd"); */
     

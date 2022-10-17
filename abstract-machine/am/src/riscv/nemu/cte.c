@@ -5,6 +5,7 @@
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
+//  printf("%p %p\n", c->mcause, c->GPR1);
   if (user_handler) {
     Event ev = {0};
     //printf("Strace: mcause = %d, mstatus = %d, mepc = %d\n", c->mcause, c->mstatus, c->mepc);
@@ -18,15 +19,6 @@ Context* __am_irq_handle(Context *c) {
       case  7: ev.event = EVENT_SYSCALL; break; // close
       case  8: ev.event = EVENT_SYSCALL; break; // lseek
       case  9: ev.event = EVENT_SYSCALL; break; // brk
-      case 10: ev.event = EVENT_SYSCALL; break; // fstat
-      case 11: ev.event = EVENT_SYSCALL; break; // time
-      case 12: ev.event = EVENT_SYSCALL; break; // signal
-      case 13: ev.event = EVENT_SYSCALL; break; // execve
-      case 14: ev.event = EVENT_SYSCALL; break; // fork
-      case 15: ev.event = EVENT_SYSCALL; break; // link
-      case 16: ev.event = EVENT_SYSCALL; break; // unlink
-      case 17: ev.event = EVENT_SYSCALL; break; // wait
-      case 18: ev.event = EVENT_SYSCALL; break; // times
       case 19: ev.event = EVENT_SYSCALL; break; // gettimeofday
       default: ev.event = EVENT_ERROR  ; break;
     }

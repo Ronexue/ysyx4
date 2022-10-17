@@ -29,7 +29,10 @@ all:
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	@echo "========== Verilator Tracing =========="
+	@echo "---------- VERILATE ----------"
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
+	@echo "---------- RUN ----------"
 	obj_dir/Vtop
 #	gtkwave ./obj_dir/top.vcd
 

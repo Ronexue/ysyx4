@@ -4,7 +4,7 @@ void do_syscall(Context *c);
 
 static Context* do_event(Event e, Context* c) {
   switch (e.event) {
-    case EVENT_YIELD: //printf("Strace: event_yield caused.\n"); 
+    case EVENT_YIELD: printf("Strace: event_yield caused.\n"); 
       break;
     case EVENT_SYSCALL: //printf("Strace: event_syscall caused.\n"); 
       do_syscall(c);
