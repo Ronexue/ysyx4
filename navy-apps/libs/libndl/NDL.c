@@ -6,10 +6,13 @@
 
 #include <sys/time.h>
 #include <fcntl.h>
+#include <assert.h>
 
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int canvas_w = 0, canvas_h = 0;
+static int center_w = 0, center_h = 0;
 
 uint32_t NDL_GetTicks() {
   struct timeval tv;
@@ -41,9 +44,22 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   }
+  assert(0 <= *w && *w < screen_w);
+  assert(0 <= *h && *h < screen_h);
+  canvas_w = *w;
+  canvas_h = *h;
+  center_w = screen_w / 2 - canvas_w / 2;
+  center_h = screen_h / 2 - canvas_h / 2;
+printf("center_h=%d center_w=%d\n", center_h, center_w);
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+  int fd = open("/dev/fb", 0, 0);
+printf("fd=%d\n", fd);
+  for (int i = 0; i < h; ++i) {
+    lseek(fd, ((center_h + x + i) * screen_w + center_w + y) * 4, SEEK_SET);
+    write(fd, pixels + i * w, w * 4);
+  }
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
@@ -63,6 +79,16 @@ int NDL_QueryAudio() {
 int NDL_Init(uint32_t flags) {
   if (getenv("NWM_APP")) {
     evtdev = 3;
+  }
+  int fd = open("/proc/dispinfo", 0, 0);
+  char buf[64];
+  read(fd, buf, 64);
+  int len = strlen(buf), flag = 1;
+  for (int i = 0; i < len; ++i) {
+    if ('0' <= buf[i] && buf[i] <= '9') {
+      if (!flag) screen_w = screen_w * 10 + buf[i] - '0';
+      else screen_h = screen_h * 10 + buf[i] - '0';
+    } else if (buf[i] == ':') flag ^= 1;
   }
   return 0;
 }
