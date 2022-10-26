@@ -75,13 +75,13 @@ int main(int argc, char**argv, char**env) {
     }
 
 //    Vtop*top = new Vtop{contextp};
-    contextp->timeInc(1); 
+    contextp->timeInc(1);           //表示时间的推进，如果先定义，波形是从1s开始，如果后定义，波形从0s开始
     top->clk = 0;
     top->rst = 1;
-    top->eval();
+    top->eval();           //更新上一秒中的clk和rst波形
     top->clk = 1;
     contextp->timeInc(1); 
-    top->eval();
+    top->eval();          //若不加，上一秒的clk变化波形图记录不到
     top->rst = 0;
     int cnt = 0;
     

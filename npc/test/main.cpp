@@ -2,20 +2,20 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "verilated.h"
-#include "Vtest.h"
+#include "Vtest.h"              //change
 #include "verilated_vcd_c.h"
 
 int main(int argc, char** argv, char** env) {
   VerilatedContext* contextp = new VerilatedContext;
   contextp->commandArgs(argc, argv);
-  Vtest* top = new Vtest{contextp};
+  Vtest* top = new Vtest{contextp};     //
   
   contextp->traceEverOn(true);
   VerilatedVcdC* tfp = new VerilatedVcdC;
   top->trace(tfp,99);
   tfp->open("obj_dir/test.vcd");
 
-  while (contextp->time() < 5 && !contextp->gotFinish()) {
+  while (contextp->time() < 15 && !contextp->gotFinish()) {
     int a = rand() & 1;
     int b = rand() & 1;
     top->a = a;
