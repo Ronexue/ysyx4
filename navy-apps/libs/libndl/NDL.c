@@ -7,6 +7,8 @@
 #include <sys/time.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 static int evtdev = -1;
 static int fbdev = -1;
@@ -44,20 +46,24 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   }
-  assert(0 <= *w && *w < screen_w);
-  assert(0 <= *h && *h < screen_h);
+  printf("%d %d\n", screen_w, *w);
+  printf("%d %d\n", screen_h, *h);
+  if (*w == 0) *w = screen_w;
+  if (*h == 0) *h = screen_h;
+  assert(1 <= *w && *w <= screen_w);
+  assert(1 <= *h && *h <= screen_h);
   canvas_w = *w;
   canvas_h = *h;
   center_w = screen_w / 2 - canvas_w / 2;
   center_h = screen_h / 2 - canvas_h / 2;
-printf("center_h=%d center_w=%d\n", center_h, center_w);
+//printf("center_h=%d center_w=%d\n", center_h, center_w);
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   int fd = open("/dev/fb", 0, 0);
-printf("fd=%d\n", fd);
+//printf("fd=%d\n", fd);
   for (int i = 0; i < h; ++i) {
-    lseek(fd, ((center_h + x + i) * screen_w + center_w + y) * 4, SEEK_SET);
+    lseek(fd, ((center_h + y + i) * screen_w + center_w + x) * 4, SEEK_SET);
     write(fd, pixels + i * w, w * 4);
   }
 }

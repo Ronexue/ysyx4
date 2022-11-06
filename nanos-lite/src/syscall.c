@@ -50,8 +50,6 @@ void do_syscall(Context *c) {
       us = io_read(AM_TIMER_UPTIME).us;
       ((struct timeval *) a[1])->tv_usec = us % 1000000;
       ((struct timeval *) a[1])->tv_sec = us / 1000000;
-      ((struct timezone *)a[2])->tz_minuteswest = -480;
-      ((struct timezone *)a[2])->tz_dsttime = 0;
       c->GPRx = 0;
       break;
 
