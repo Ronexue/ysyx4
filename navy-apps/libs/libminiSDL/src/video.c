@@ -19,14 +19,17 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   // printf("sx: %d, sy: %d, w: %d, h: %d, dx: %d, dy: %d\n", sx, sy, w, h, dx, dy);
   // printf("src-w: %d, src-h: %d, dst-w: %d, dst-h: %d\n", src->w, src->h, dst->w, dst->h);
   // should be in the rect of dst
+  assert(sx >= 0 && sy >= 0);
+  assert(dx >= 0 && dy >= 0);
   w = min(w, dst->w - dx);
   h = min(h, dst->h - dy);
   // copy
   for (int i = 0; i < h; ++i) {
     for (int j = 0; j < w; ++j) {
       // printf("%d %d\n", i, j);
-      for (int k = 0; k < 4; ++k) {
-        *(dst->pixels + ((dy + i) * dst->w + dx + j) * 4 + k) = *(src->pixels + ((sy + i) * src->w + sx + j) * 4 + k);
+      for (int k = 0; k < dst->format->BytesPerPixel; ++k) {
+        *(dst->pixels + ((dy + i) * dst->w + dx + j) * dst->format->BytesPerPixel + k) = 
+        *(src->pixels + ((sy + i) * src->w + sx + j) * dst->format->BytesPerPixel + k);
       }
     }
   }

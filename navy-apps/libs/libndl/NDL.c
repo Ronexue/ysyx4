@@ -16,11 +16,13 @@ static int screen_w = 0, screen_h = 0;
 static int canvas_w = 0, canvas_h = 0;
 static int center_w = 0, center_h = 0;
 
+static uint32_t base_ticks = 0;
+
 uint32_t NDL_GetTicks() {
   struct timeval tv;
   struct timezone tz;
   gettimeofday(&tv, &tz);
-  return tv.tv_sec * 1000000 + tv.tv_usec;
+  return tv.tv_sec * 1000 + tv.tv_usec / 1000 - base_ticks;
 }
 
 int NDL_PollEvent(char *buf, int len) {
@@ -96,6 +98,10 @@ int NDL_Init(uint32_t flags) {
       else screen_h = screen_h * 10 + buf[i] - '0';
     } else if (buf[i] == ':') flag ^= 1;
   }
+  struct timeval tv;
+  struct timezone tz;
+  gettimeofday(&tv, &tz);
+  base_ticks = tv.tv_sec * 1000 + tv.tv_usec / 1000;
   return 0;
 }
 
