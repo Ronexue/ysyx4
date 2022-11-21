@@ -62,7 +62,7 @@ void Vtop___024root___settle__TOP__3(Vtop___024root* vlSelf) {
     if (VL_LIKELY((IData)((0x73U == (0x7fU & vlSelf->instr_i))))) {
         Vtop___024unit____Vdpiimwrap_c_trap_TOP____024unit(1U);
     } else {
-        VL_WRITEF("no\n");
+        VL_WRITEF("\nno trap\n\n");
     }
     vlSelf->top__DOT__control0__DOT__Btype = (IData)(
                                                      (0x63U 
@@ -109,11 +109,17 @@ void Vtop___024root___settle__TOP__3(Vtop___024root* vlSelf) {
                                                     == 
                                                     (0x7fU 
                                                      & vlSelf->instr_i)));
+    VL_WRITEF("pc: %x\n",64,vlSelf->pc);
     vlSelf->top__DOT__busA = ((0U == (0x1fU & (vlSelf->instr_i 
                                                >> 0xfU)))
                                ? 0ULL : vlSelf->top__DOT__registers0__DOT__rf
                               [(0x1fU & (vlSelf->instr_i 
                                          >> 0xfU))]);
+    vlSelf->top__DOT__busB = ((0U == (0x1fU & (vlSelf->instr_i 
+                                               >> 0x14U)))
+                               ? 0ULL : vlSelf->top__DOT__registers0__DOT__rf
+                              [(0x1fU & (vlSelf->instr_i 
+                                         >> 0x14U))]);
     vlSelf->top__DOT__Branch = ((((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
                                   & (IData)((0U != 
                                              (0x5000U 
@@ -301,9 +307,6 @@ void Vtop___024root___settle__TOP__3(Vtop___024root* vlSelf) {
                                     | (IData)(vlSelf->top__DOT__control0__DOT__jalr)) 
                                    | (IData)(vlSelf->top__DOT__control0__DOT__auipc))
                                    ? vlSelf->pc : vlSelf->top__DOT__busA);
-    vlSelf->top__DOT__busB = ((0ULL == vlSelf->top__DOT__busA)
-                               ? 0ULL : vlSelf->top__DOT__registers0__DOT__rf
-                              [(0x1fU & (IData)(vlSelf->top__DOT__busA))]);
     vlSelf->top__DOT__imm = ((0U == (IData)(vlSelf->top__DOT__ExtOp))
                               ? (((- (QData)((IData)(
                                                      (vlSelf->instr_i 

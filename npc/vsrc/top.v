@@ -509,7 +509,7 @@ assign ExtOp[0]   = lui   |
 
 always @(*) begin
         if(Env) c_trap(1);
-        else $display("no");
+        else $display("\nno trap\n");
 end
 
 endmodule
@@ -598,7 +598,7 @@ assign Store    = ~OP[6] &  OP[5] & ~OP[4] & ~OP[3] & ~OP[2] &  OP[1] &  OP[0]; 
 assign Btype    =  OP[6] &  OP[5] & ~OP[4] & ~OP[3] & ~OP[2] &  OP[1] &  OP[0]; // B - type - beq   1100011
 assign jal      =  OP[6] &  OP[5] & ~OP[4] &  OP[3] &  OP[2] &  OP[1] &  OP[0]; // J - type - jal   1101111
 assign jalr     =  OP[6] &  OP[5] & ~OP[4] & ~OP[3] &  OP[2] &  OP[1] &  OP[0]; // I - type - jalr  1100111
-assign Env      =  OP[6] &  OP[5] &  OP[4] & ~OP[3] & ~OP[2] &  OP[1] &  OP[0]; // I - type - jalr  1100111
+assign Env      =  OP[6] &  OP[5] &  OP[4] & ~OP[3] & ~OP[2] &  OP[1] &  OP[0]; // 
 
 endmodule
 
@@ -795,6 +795,10 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
+always @(*) begin
+	$display("pc: %x",pc);
+end
+
 endmodule
 
 module registers(
@@ -814,7 +818,7 @@ parameter ADDR_WIDTH = 5 ;
 reg [63:0] rf [(1 << ADDR_WIDTH)-1:0];
 
 assign  rdata1 = (raddr1 == 0) ? 0 : rf[raddr1];
-assign  rdata2 = (rdata1 == 0) ? 0 : rf[rdata1]; 
+assign  rdata2 = (raddr2 == 0) ? 0 : rf[raddr2]; 
 
 always @(posedge clk) begin
     if (we) rf[waddr] <= wdata;

@@ -24,7 +24,7 @@ image: $(IMAGE).elf
 NPC_HOME = ~/ysyx-workbench/npc
 
 run: image
-	$(NPC_HOME)/obj_dir/Vtop +trace $(IMAGE).bin
+	$(NPC_HOME)/obj_dir/Vtop +trace $(IMAGE).bin -b -i
 
 ###########调试出波形不成功###########
 #run: image

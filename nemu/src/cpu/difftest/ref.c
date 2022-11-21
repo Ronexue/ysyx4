@@ -20,29 +20,22 @@
 
 void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   if (direction == DIFFTEST_TO_REF) {
-    for (size_t i = 0; i < n; ++i) {
-      paddr_write(addr + i, 1, *((uint8_t*)buf + i));
-    }
+  	int paddr = addr;
+  	uint8_t* buff = (uint8_t*) buf;//riscv64
+  	for(int i = 0; i < n; i++){
+  		word_t data = buff[i];
+  		paddr_write(paddr, 1, data);
+  	}
+  } else {
+    assert(0);
   }
 }
 
 void difftest_regcpy(void *dut, bool direction) {
   if (direction == DIFFTEST_TO_REF) {
-    cpu.pc = ((uint64_t*)dut)[32];
-    for (int i = 0; i < 32; ++i) {
-      cpu.gpr[i] = ((uint64_t*)dut)[i];
-    }
-    for (int i = 0; i < 4; ++i) {
-      cpu.csr[i] = ((uint64_t*)dut)[i];
-    }
+    memcpy((CPU_state*)dut, &cpu, DIFFTEST_REG_SIZE);
   } else {
-    ((uint64_t*)dut)[32] = cpu.pc;
-    for (int i = 0; i < 32; ++i) {
-      ((uint64_t*)dut)[i] = cpu.gpr[i];
-    }
-    for (int i = 0; i < 4; ++i) {
-      ((uint64_t*)dut)[i] = cpu.csr[i];
-    }
+    memcpy(&cpu, (CPU_state*)dut, DIFFTEST_REG_SIZE);
   }
 }
 

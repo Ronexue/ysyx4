@@ -1,5 +1,5 @@
 VFILES := $(wildcard vsrc/*.v)
-#CFILES := $(wildcard csrc/*.cpp)
+CFILES := $(wildcard csrc/*.cpp)
 VERILATOR = verilator
 # Generate C++ in executable form
 VERILATOR_FLAGS += -cc --exe --build --top-module top
@@ -22,17 +22,25 @@ VERILATOR_FLAGS += --trace
 
 # Input files for Verilator
 #VERILATOR_INPUT = $(VFILES) $(CFILES)
-VERILATOR_INPUT = $(VFILES) csrc/sim_main.cpp
+VERILATOR_INPUT = $(VFILES) $(CFILES)
+LDFLAGS = -lreadline
 
 all:
 	@echo "Write this Makefile by your self."
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	@echo " "
 	@echo "========== Verilator Tracing =========="
+	@echo " "
 	@echo "---------- VERILATE ----------"
-	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
+	@echo " "
+	$(VERILATOR) $(VERILATOR_FLAGS) $(addprefix -LDFLAGS , $(LDFLAGS)) $(VERILATOR_INPUT)
+	@echo " "
 	@echo "---------- RUN ----------"
+	@echo " "
+	@echo "---------- EXECUTE ----------"
+	@echo " "
 	obj_dir/Vtop
 #	gtkwave ./obj_dir/top.vcd
 
