@@ -3,62 +3,86 @@
 #include <string.h>
 
 #define keyname(k) #k,
+static uint8_t keystate[100] = {0};
 
 static const char *keyname[] = {
   "NONE",
   _KEYS(keyname)
 };
 
-#define NUMBER_OF_KEYS 83
-#define EVENT_BUF_LENGTH 64
-char buf[EVENT_BUF_LENGTH];
-uint8_t status[NUMBER_OF_KEYS];
-
 int SDL_PushEvent(SDL_Event *ev) {
-  while (1);
   return 0;
 }
 
-int SDL_PollEvent(SDL_Event *ev) {
-  if (NDL_PollEvent(buf, EVENT_BUF_LENGTH) == 0) {
-    ev->type = SDL_KEYUP;
-    ev->key.keysym.sym = SDLK_NONE;
+int SDL_PollEvent(SDL_Event *event) {
+  char keys[100];
+  char the_key[100];
+  memset(keys,0,sizeof(keys));
+  int ret = NDL_PollEvent(keys,sizeof(keys));
+  if(ret == 0){
     return 0;
   }
-  if (buf[0] == 'k') {
-    int code = 0;
-    for (int i = 0; i < 83; ++i) {
-      if (strncmp(buf + 3, keyname[i], strlen(buf + 3) - 1) == 0) {
-        code = i;
-        break;
-      }
+  memcpy(the_key,keys+3,strlen(keys)-2);
+  int now = 0,keycode = 0,siz = sizeof(keyname);
+  for(int i = 0;i < 83; i++){
+
+    //printf("i %d first %s second %s\n",i,keyname[i],the_key);
+    if(strcmp(keyname[i],the_key) == 0){
+      keycode = i;
+      now = siz;
     }
-    if (buf[1] == 'd') {
-      ev->type = SDL_KEYDOWN;
-      ev->key.keysym.sym = code;
-      status[code] = 1;
-      printf("SDL_PollEvent: Key Down %d\n", code);
-    } else if (buf[1] == 'u') {
-      ev->type = SDL_KEYUP;
-      ev->key.keysym.sym = code;
-      status[code] = 0;
-      printf("SDL_PollEvent: Key Up %d\n", code);
-    }
-    return 1;
+    now += sizeof(keyname[i]);
   }
-  while (1);
+  //printf("%s %d\n",the_key,keycode);
+  if(keys[0] == 'k' && keys[1] == 'd'){
+    event->type = SDL_KEYDOWN;
+    keystate[keycode] = 1;
+  } else if(keys[0] == 'k' && keys[1] == 'u'){
+    event->type = SDL_KEYUP;
+    keystate[keycode] = 0;
+  }
+  event->key.keysym.sym = keycode;
+  //printf("%d\n",event->key.keysym.sym);
+  return 1;
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  while (SDL_PollEvent(event) == 0);
+  //printf("wait %d\n",sizeof(keyname));
+  char keys[100];
+  char the_key[100];
+  memset(keys,0,sizeof(keys));
+  int ret = NDL_PollEvent(keys,sizeof(keys));
+  while(ret == 0){
+    ret = NDL_PollEvent(keys,sizeof(keys));
+  }
+  memcpy(the_key,keys+3,strlen(keys)-2);
+  int now = 0,keycode = 0,siz = sizeof(keyname);
+  for(int i = 0;i < 83; i++){
+
+    //printf("i %d first %s second %s\n",i,keyname[i],the_key);
+    if(strcmp(keyname[i],the_key) == 0){
+      keycode = i;
+      now = siz;
+    }
+    now += sizeof(keyname[i]);
+  }
+  //printf("%s %d\n",the_key,keycode);
+  if(keys[0] == 'k' && keys[1] == 'd'){
+    event->type = SDL_KEYDOWN;
+    keystate[keycode] = 1;
+  } else if(keys[0] == 'k' && keys[1] == 'u'){
+    event->type = SDL_KEYUP;
+    keystate[keycode] = 0;
+  }
+  event->key.keysym.sym = keycode;
+  //printf("%d\n",event->key.keysym.sym);
   return 1;
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
-  while (1);
   return 0;
 }
 
 uint8_t* SDL_GetKeyState(int *numkeys) {
-  return status;
+  return keystate;
 }

@@ -18,26 +18,56 @@
 #include "npc_sdb.h"
 
 /////////////////////////////////////////////////////////
-/*                       IMEM                          */
+/*                       MEM                           */
 /////////////////////////////////////////////////////////
 
 #define MEMSIZE 65536
 #define AD_BASE 0x80000000
-static uint32_t IMEM[MEMSIZE];
-
+static uint32_t MEM[MEMSIZE];//8字节为单位
 static bool EXIT = 0;
-uint64_t pimem_read(uint64_t paddr){
-    printf(ASNI_FG_YELLOW "\naddrs=%016lx\t" ASNI_NONE,paddr);
-    uint64_t real_addr = (paddr - AD_BASE) >> 2;
-    printf(ASNI_FG_YELLOW "real_addrs=%016lx\n" ASNI_NONE,real_addr);
-    if(real_addr >= MEMSIZE){EXIT = 1;printf(ASNI_FG_YELLOW "addrs=%016lx\n",paddr);return 0;}
-    
-    return IMEM[real_addr];
-}
-
+static bool START = 0;
 static bool is_done = false;
+
 extern "C" void c_trap(const svBit done){       //extern "C" 是让编译器以处理 C 语言代码的方式来处理修饰的 C++ 代码
     is_done = done;
+}
+
+extern "C" void pmem_read(long long raddr, long long *rdata) {
+  long long real_addr = (raddr - AD_BASE) >> 2;
+printf("pmem_read:real_addr=%llx\n",real_addr);
+//printf("rdata=%llx\n",*rdata);
+  //assert(real_addr < MEMSIZE);
+  if(raddr < AD_BASE || ((raddr - AD_BASE) >> 2) >= MEMSIZE){
+    //if(START) EXIT = 1;printf("pmem_addrs=%llx\n",raddr);
+    *rdata = 0;
+    return;
+  }
+  else *rdata = MEM[real_addr];// 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
+}
+
+extern "C" void pmem_write(long long waddr, long long wdata, char wmask) {
+    long long real_addr = (waddr - AD_BASE) >> 3;
+  //assert(real_addr < MEMSIZE);
+  if(waddr < AD_BASE || ((waddr - AD_BASE) >> 3) >= MEMSIZE){
+    //if(START) EXIT = 1;//printf("addrs=%lx\n",raddr); 
+    return;
+  }
+  else{
+    uint64_t real_mask = -1;
+    if(wmask == 0x1) real_mask = 0xffull;
+    else if(wmask == 0x3) real_mask = 0xffffull;
+    else if(wmask == 0xf) real_mask = 0xffffffffull;
+    else real_mask = -1;
+    MEM[real_addr] = (MEM[real_addr] & (~real_mask)) | (wdata & real_mask);
+    return;
+  }
+  // 总是往地址为`waddr & ~0x7ull`的8字节按写掩码`wmask`写入`wdata`
+  // `wmask`中每比特表示`wdata`中1个字节的掩码,
+  // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
+}
+
+extern "C" int get_instr(int instr) {
+  return instr;
 }
 
 /////////////////////////////////////////////////////////
@@ -126,20 +156,19 @@ printf("\n-------------SIM START---------------\n\n");
         fseek(fp, 0, SEEK_END);
         int fsize = ftell(fp);
         fseek(fp, 0, SEEK_SET);
-        assert(fread(IMEM, fsize, 1, fp));
+        assert(fread(MEM, fsize, 1, fp));
         fclose(fp);
-        printf(ASNI_FG_BLUE "Load image in %s\n" ASNI_NONE ,image_file);
+printf(ASNI_FG_BLUE "Load image in %s\n" ASNI_NONE ,image_file);
     }
     else
     {
-        printf(ASNI_FG_BLUE "Load build-in image\n" ASNI_NONE);
-        IMEM[0] = 0x7ff00093;//addi-I x1,x0,0111_1111_1111
-        //0x004000ef jal x1 0_01000000_0_0000000000
-        IMEM[1] = 0x0ffff097;//auipc-U x1,0x0ffff=0000_1111_1111_1111_1111
-        IMEM[2] = 0xff0ff0b7;//lui x1,0xff0ff=1111_1111_0000_1111_1111
-        IMEM[3] = 0x00108093;//addi x1,x1,1
-        IMEM[4] = 0x00100073;//ebreak
-        IMEM[5] = 0x00108093;
+printf(ASNI_FG_BLUE "Load build-in image\n" ASNI_NONE);
+        MEM[0] = 0x7ff00093;//addi-I x1,x0,0111_1111_1111
+        MEM[1] = 0x0ffff097;//auipc-U x1,0x0ffff=0000_1111_1111_1111_1111
+        MEM[2] = 0xff0ff0b7;//lui x1,0xff0ff=1111_1111_0000_1111_1111
+        MEM[3] = 0x00108093;//addi x1,x1,1
+        MEM[4] = 0x00100073;//ebreak
+        MEM[5] = 0x00108093;
     }
 
     //reset the pc
@@ -150,14 +179,16 @@ printf("\n-------------SIM START---------------\n\n");
     top->clk = 1;
     contextp->timeInc(1); 
     top->eval();          //若不加，上一秒的clk变化波形图记录不到
+printf("main:initial_pc = %016lx\n",top->pc);
     top->rst = 0;
+    START = 1;
     int cnt = 0;
     
     if(is_batch)
         while (!is_done && !contextp->gotFinish()) { 
             contextp->timeInc(1); 
             top->clk = !top->clk;
-            if(top->clk == 0)top->instr_i = pimem_read(top->pc);
+            //if(top->clk == 0)top->instr_i = pimem_read(top->pc);
             if(EXIT){printf(ASNI_FG_RED "ASSERT!\n" ASNI_NONE); top->eval();break;}
 //printf("Next status: clk = %d, rst = %d, pc = %016lx, instr = %08x\n", top->clk, top->rst, top->pc, top->instr_i);
             top->eval();
@@ -192,9 +223,9 @@ static void npc_exec(uint64_t n){
     for (uint64_t i = 1; i <= n && !is_done && !sdb_contextp->gotFinish(); i++) { 
         sdb_contextp->timeInc(1); 
         sdb_top->clk = !sdb_top->clk;
-        if(sdb_top->clk == 0)sdb_top->instr_i = pimem_read(sdb_top->pc);
+        //if(sdb_top->clk == 0)sdb_top->instr_i = pmem_read(sdb_top->pc);
         if(EXIT){printf(ASNI_FG_RED "ASSERT!\n" ASNI_NONE); sdb_top->eval();break;}
-        //printf("Next status: clk = %d, rst = %d, pc = %016lx, instr = %08x\n", top->clk, top->rst, top->pc, top->instr_i);
+printf("Next status: clk = %d, rst = %d, pc = %016lx, instr = %08x\n", sdb_top->clk, sdb_top->rst, sdb_top->pc, sdb_top->instr);
         sdb_top->eval();
     }
     if(is_done){

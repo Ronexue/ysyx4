@@ -1,6 +1,6 @@
 #include <common.h>
 #include "syscall.h"
-
+#include <proc.h>
 #include <sys/time.h>
 
 int fs_open(const char *pathname, int flags, int mode);
@@ -8,6 +8,7 @@ size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
 size_t fs_lseek(int fd, size_t offset, int whence);
 int fs_close(int fd);
+static int sys_execve(const char *fname, char * const argv[], char *const envp[]);
 
 
 void do_syscall(Context *c) {
@@ -21,7 +22,8 @@ void do_syscall(Context *c) {
 
   switch (a[0]) {
     case SYS_exit: //printf("Strace: sys_exit.\n");
-      halt(0);
+    c->GPRx = sys_execve("/bin/nterm",NULL,NULL);
+      //c->GPRx = sys_execve("/bin/menu",NULL,NULL);
       break;
     case SYS_yield: //printf("Strace: sys_yield.\n");
       yield();
@@ -52,7 +54,16 @@ void do_syscall(Context *c) {
       ((struct timeval *) a[1])->tv_sec = us / 1000000;
       c->GPRx = 0;
       break;
+    case SYS_execve: //printf("Strace: sys_execve.\n");
+      c->GPRx = sys_execve((const char *)a[1],(char * const*)a[2],(char *const*)a[3]);
+      break;
 
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
+}
+
+void naive_uload(PCB *pcb, const char *filename);
+static int sys_execve(const char *fname, char * const argv[], char *const envp[]){
+  naive_uload(NULL,fname);
+  return -1;
 }

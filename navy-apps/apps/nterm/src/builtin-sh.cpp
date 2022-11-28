@@ -23,11 +23,34 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
+  char* cmd_p=(char*)cmd;
+  char* c_name=strtok(cmd_p," \n");
+  if (c_name==NULL) return;
+  else if(!strcmp(c_name,"echo")){
+    char* str=strtok(NULL," ");
+    sh_printf("%s",str);
+  }
+  else if(!strcmp(c_name,"exit")){
+    exit(0);
+  }
+  else{
+    char* c_args=strtok(NULL," \n");
+    char* args[]={c_name,c_args,NULL};
+    char* envp[]={NULL};
+      int ret=execvp(c_name,args);
+    if(ret==-1){
+      if(c_name[0]=='/'){
+          if(execve(c_name,args,envp)==-1) sh_printf("No such file \"%s\"\n",c_name);
+        }
+        else sh_printf("No such command \"%s\"\n",c_name);
+    }
+  }
 }
 
 void builtin_sh_run() {
   sh_banner();
   sh_prompt();
+  setenv("PATH", "/bin:/usr/bin", 0);
 
   while (1) {
     SDL_Event ev;

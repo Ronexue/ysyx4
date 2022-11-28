@@ -5,10 +5,18 @@
 /* verilator lint_off MODDUP */
 /* verilator lint_off SELRANGE */
 
+import "DPI-C" function void pmem_read(
+  input longint raddr, output longint rdata);
+
+import "DPI-C" function void pmem_write(
+  input longint waddr, input longint wdata, input byte wmask);
+
+import "DPI-C" function int get_instr(input int instr);
+
 module top(
   input clk,
   input rst,
-  input [31: 0]instr_i,
+  output [31: 0]instr,
   output [63: 0] pc
 );
 
@@ -25,14 +33,15 @@ pcunit pcunit0(
 	.pc(pc)
 );
 
-/* wire [31: 0] Instr;
+ wire [31: 0] instr_i;
 instrmemory instrmemory0(
 	.clk(clk)        ,
 	.rst(rst)        ,
 	//.InstrIn(InstrIn),
-	.Addr(pcout[31: 2])     ,
-	.Instr(Instr)
-); */
+	.Addr(pc)        ,
+	.Instr(instr_i)
+);
+assign instr = instr_i; 
 
 
 wire [ 6: 0] OP    ;
@@ -631,25 +640,21 @@ assign imm = (ExtOp == 3'b000) ? immI :
 
 endmodule
 
-/* module instrmemory(
+module instrmemory(
 	input              clk,
 	input              rst, 
-	input      [29: 0] Addr,
-	output reg [31: 0] Instr
+	input      [63: 0] Addr,
+	output     [31: 0] Instr
 );
 
-reg [31: 0] mem [0: 255];
+wire [63:0] rdata;
+/* verilator lint_off UNOPTFLAT */
+always@(*) begin pmem_read(Addr, rdata); end
+assign Instr = rdata[31: 0];
+//assign Instr = (Addr[2] == 0) ? rdata[31:0] : rdata[63:32];
 
-always @(posedge clk or posedge rst) begin 
-	if(rst == 1'b1) begin
-		Instr = 32'b0;
-	end
-	else begin
-		Instr = mem[Addr]; 
-	end
-end
 
-endmodule */
+endmodule 
 
 module mux21_1(
 	input  in0,

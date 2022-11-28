@@ -45,12 +45,13 @@ void Vtop___024root___initial__TOP__1(Vtop___024root* vlSelf) {
     Vtop___024root____Vdpiimwrap_top__DOT__registers0__DOT__set_gpr_ptr__Vdpioc2_TOP(vlSelf->top__DOT__registers0__DOT__rf);
 }
 
+void Vtop___024unit____Vdpiimwrap_pmem_read_TOP____024unit(QData/*63:0*/ raddr, QData/*63:0*/ &rdata);
 void Vtop___024unit____Vdpiimwrap_c_trap_TOP____024unit(CData/*0:0*/ done);
 
-void Vtop___024root___settle__TOP__3(Vtop___024root* vlSelf) {
+void Vtop___024root___settle__TOP__4(Vtop___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___settle__TOP__3\n"); );
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___settle__TOP__4\n"); );
     // Variables
     VlWide<3>/*95:0*/ __Vtemp3;
     VlWide<3>/*95:0*/ __Vtemp4;
@@ -59,104 +60,117 @@ void Vtop___024root___settle__TOP__3(Vtop___024root* vlSelf) {
     VlWide<3>/*95:0*/ __Vtemp7;
     VlWide<3>/*95:0*/ __Vtemp9;
     // Body
-    if (VL_LIKELY((IData)((0x73U == (0x7fU & vlSelf->instr_i))))) {
+    VL_WRITEF("pc: %x\n",64,vlSelf->pc);
+    Vtop___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelf->pc, vlSelf->__Vtask_pmem_read__0__rdata);
+    vlSelf->top__DOT__instrmemory0__DOT__rdata = vlSelf->__Vtask_pmem_read__0__rdata;
+    if (VL_LIKELY((IData)((0x73ULL == (0x7fULL & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) {
         Vtop___024unit____Vdpiimwrap_c_trap_TOP____024unit(1U);
     } else {
         VL_WRITEF("\nno trap\n\n");
     }
-    vlSelf->top__DOT__control0__DOT__Btype = (IData)(
-                                                     (0x63U 
-                                                      == 
-                                                      (0x7fU 
-                                                       & vlSelf->instr_i)));
+    vlSelf->instr = (IData)(vlSelf->top__DOT__instrmemory0__DOT__rdata);
+    vlSelf->top__DOT__busA = ((0U == (0x1fU & (IData)(
+                                                      (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                       >> 0xfU))))
+                               ? 0ULL : vlSelf->top__DOT__registers0__DOT__rf
+                              [(0x1fU & (IData)((vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                 >> 0xfU)))]);
+    vlSelf->top__DOT__busB = ((0U == (0x1fU & (IData)(
+                                                      (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                       >> 0x14U))))
+                               ? 0ULL : vlSelf->top__DOT__registers0__DOT__rf
+                              [(0x1fU & (IData)((vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                 >> 0x14U)))]);
     vlSelf->top__DOT__control0__DOT__Load = (IData)(
-                                                    (3U 
+                                                    (3ULL 
                                                      == 
-                                                     (0x7fU 
-                                                      & vlSelf->instr_i)));
+                                                     (0x7fULL 
+                                                      & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
     vlSelf->top__DOT__control0__DOT__jalr = (IData)(
-                                                    (0x67U 
+                                                    (0x67ULL 
                                                      == 
-                                                     (0x7fU 
-                                                      & vlSelf->instr_i)));
+                                                     (0x7fULL 
+                                                      & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
     vlSelf->top__DOT__control0__DOT__Store = (IData)(
-                                                     (0x23U 
+                                                     (0x23ULL 
                                                       == 
-                                                      (0x7fU 
-                                                       & vlSelf->instr_i)));
+                                                      (0x7fULL 
+                                                       & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
     vlSelf->top__DOT__control0__DOT__auipc = (IData)(
-                                                     (0x17U 
+                                                     (0x17ULL 
                                                       == 
-                                                      (0x7fU 
-                                                       & vlSelf->instr_i)));
+                                                      (0x7fULL 
+                                                       & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
     vlSelf->top__DOT__control0__DOT__jal = (IData)(
-                                                   (0x6fU 
+                                                   (0x6fULL 
                                                     == 
-                                                    (0x7fU 
-                                                     & vlSelf->instr_i)));
+                                                    (0x7fULL 
+                                                     & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
     vlSelf->top__DOT__control0__DOT__Rtype = (IData)(
-                                                     (0x33U 
+                                                     (0x33ULL 
                                                       == 
-                                                      (0x7fU 
-                                                       & vlSelf->instr_i)));
+                                                      (0x7fULL 
+                                                       & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
     vlSelf->top__DOT__control0__DOT__ItypeALU = (IData)(
-                                                        (0x13U 
+                                                        (0x13ULL 
                                                          == 
-                                                         (0x7fU 
-                                                          & vlSelf->instr_i)));
+                                                         (0x7fULL 
+                                                          & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
+    vlSelf->top__DOT__control0__DOT__Btype = (IData)(
+                                                     (0x63ULL 
+                                                      == 
+                                                      (0x7fULL 
+                                                       & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
     vlSelf->top__DOT__control0__DOT__lui = (IData)(
-                                                   (0x37U 
+                                                   (0x37ULL 
                                                     == 
-                                                    (0x7fU 
-                                                     & vlSelf->instr_i)));
-    VL_WRITEF("pc: %x\n",64,vlSelf->pc);
-    vlSelf->top__DOT__busA = ((0U == (0x1fU & (vlSelf->instr_i 
-                                               >> 0xfU)))
-                               ? 0ULL : vlSelf->top__DOT__registers0__DOT__rf
-                              [(0x1fU & (vlSelf->instr_i 
-                                         >> 0xfU))]);
-    vlSelf->top__DOT__busB = ((0U == (0x1fU & (vlSelf->instr_i 
-                                               >> 0x14U)))
-                               ? 0ULL : vlSelf->top__DOT__registers0__DOT__rf
-                              [(0x1fU & (vlSelf->instr_i 
-                                         >> 0x14U))]);
-    vlSelf->top__DOT__Branch = ((((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
-                                  & (IData)((0U != 
-                                             (0x5000U 
-                                              & vlSelf->instr_i)))) 
-                                 << 1U) | ((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
-                                           & (IData)(
-                                                     (0x1000U 
-                                                      != 
-                                                      (0x5000U 
-                                                       & vlSelf->instr_i)))));
-    vlSelf->top__DOT__MemtoReg = ((0xffffcU & (((IData)(vlSelf->top__DOT__control0__DOT__Load) 
-                                                << 2U) 
-                                               & (vlSelf->instr_i 
-                                                  >> 0xcU))) 
-                                  | (((IData)(((1U 
-                                                == 
-                                                (1U 
-                                                 & (IData)(vlSelf->top__DOT__control0__DOT__Load))) 
-                                               & (0U 
-                                                  == 
-                                                  (0x6000U 
-                                                   & vlSelf->instr_i)))) 
-                                      << 1U) | ((IData)(vlSelf->top__DOT__control0__DOT__Load) 
+                                                    (0x7fULL 
+                                                     & vlSelf->top__DOT__instrmemory0__DOT__rdata)));
+    vlSelf->top__DOT__MemtoReg = ((((IData)(vlSelf->top__DOT__control0__DOT__Load) 
+                                    & (IData)((vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                               >> 0xeU))) 
+                                   << 2U) | (((IData)(
+                                                      ((1U 
+                                                        == 
+                                                        (1U 
+                                                         & (IData)(vlSelf->top__DOT__control0__DOT__Load))) 
+                                                       & (0ULL 
+                                                          == 
+                                                          (0x6000ULL 
+                                                           & vlSelf->top__DOT__instrmemory0__DOT__rdata)))) 
+                                              << 1U) 
+                                             | ((IData)(vlSelf->top__DOT__control0__DOT__Load) 
                                                 & (IData)(
-                                                          (0U 
+                                                          (0ULL 
                                                            != 
-                                                           (0x3000U 
-                                                            & vlSelf->instr_i))))));
-    vlSelf->top__DOT__MUXStore = ((0x1ffffeU & (((IData)(vlSelf->top__DOT__control0__DOT__Store) 
-                                                 << 1U) 
-                                                & (vlSelf->instr_i 
-                                                   >> 0xbU))) 
-                                  | ((IData)(vlSelf->top__DOT__control0__DOT__Store) 
-                                     & (~ (vlSelf->instr_i 
-                                           >> 0xdU))));
+                                                           (0x3000ULL 
+                                                            & vlSelf->top__DOT__instrmemory0__DOT__rdata))))));
+    vlSelf->top__DOT__pcnext0__DOT__offsetA = ((IData)(vlSelf->top__DOT__control0__DOT__jalr)
+                                                ? vlSelf->top__DOT__busA
+                                                : vlSelf->pc);
+    vlSelf->top__DOT__MUXStore = ((((IData)(vlSelf->top__DOT__control0__DOT__Store) 
+                                    & (IData)((vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                               >> 0xcU))) 
+                                   << 1U) | ((IData)(vlSelf->top__DOT__control0__DOT__Store) 
+                                             & (~ (IData)(
+                                                          (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                           >> 0xdU)))));
     vlSelf->top__DOT__Jump = ((IData)(vlSelf->top__DOT__control0__DOT__jal) 
                               | (IData)(vlSelf->top__DOT__control0__DOT__jalr));
+    vlSelf->top__DOT__ALU_src1 = ((((IData)(vlSelf->top__DOT__control0__DOT__jal) 
+                                    | (IData)(vlSelf->top__DOT__control0__DOT__jalr)) 
+                                   | (IData)(vlSelf->top__DOT__control0__DOT__auipc))
+                                   ? vlSelf->pc : vlSelf->top__DOT__busA);
+    vlSelf->top__DOT__Branch = ((((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
+                                  & (IData)((0ULL != 
+                                             (0x5000ULL 
+                                              & vlSelf->top__DOT__instrmemory0__DOT__rdata)))) 
+                                 << 1U) | ((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
+                                           & (IData)(
+                                                     (0x1000ULL 
+                                                      != 
+                                                      (0x5000ULL 
+                                                       & vlSelf->top__DOT__instrmemory0__DOT__rdata)))));
     vlSelf->top__DOT__ALUBSrc = (((((((IData)(vlSelf->top__DOT__control0__DOT__ItypeALU) 
                                       | (IData)(vlSelf->top__DOT__control0__DOT__lui)) 
                                      | (IData)(vlSelf->top__DOT__control0__DOT__auipc)) 
@@ -173,196 +187,219 @@ void Vtop___024root___settle__TOP__3(Vtop___024root* vlSelf) {
                                            | (IData)(vlSelf->top__DOT__control0__DOT__auipc))));
     vlSelf->top__DOT__ALUctr = ((((((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                     | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
-                                   & (IData)((0x40005000U 
-                                              == (0x40007000U 
-                                                  & vlSelf->instr_i)))) 
+                                   & (IData)((0x40005000ULL 
+                                              == (0x40007000ULL 
+                                                  & vlSelf->top__DOT__instrmemory0__DOT__rdata)))) 
                                   | ((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
-                                     & (IData)((0x5000U 
+                                     & (IData)((0x5000ULL 
                                                 == 
-                                                (0x5000U 
-                                                 & vlSelf->instr_i))))) 
+                                                (0x5000ULL 
+                                                 & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                  << 5U) | (((((((((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                   | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                  & (IData)(
-                                                           (0x5000U 
+                                                           (0x5000ULL 
                                                             == 
-                                                            (0x40007000U 
-                                                             & vlSelf->instr_i)))) 
+                                                            (0x40007000ULL 
+                                                             & vlSelf->top__DOT__instrmemory0__DOT__rdata)))) 
                                                 | (((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                     | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                    & (IData)(
-                                                             (0x7000U 
+                                                             (0x7000ULL 
                                                               == 
-                                                              (0x7000U 
-                                                               & vlSelf->instr_i))))) 
+                                                              (0x7000ULL 
+                                                               & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                                | (((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                    | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                   & (IData)(
-                                                            (0x1000U 
+                                                            (0x1000ULL 
                                                              == 
-                                                             (0x7000U 
-                                                              & vlSelf->instr_i))))) 
+                                                             (0x7000ULL 
+                                                              & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                               | (((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                   | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                  & (IData)(
-                                                           (0x4000U 
+                                                           (0x4000ULL 
                                                             == 
-                                                            (0x7000U 
-                                                             & vlSelf->instr_i))))) 
+                                                            (0x7000ULL 
+                                                             & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                              | ((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
                                                 & (IData)(
-                                                          (0x5000U 
+                                                          (0x5000ULL 
                                                            == 
-                                                           (0x5000U 
-                                                            & vlSelf->instr_i))))) 
+                                                           (0x5000ULL 
+                                                            & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                             << 4U) 
                                            | ((((((((((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                       | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                      & (IData)(
-                                                               (0x5000U 
+                                                               (0x5000ULL 
                                                                 == 
-                                                                (0x40007000U 
-                                                                 & vlSelf->instr_i)))) 
+                                                                (0x40007000ULL 
+                                                                 & vlSelf->top__DOT__instrmemory0__DOT__rdata)))) 
                                                     | (((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                         | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                        & (IData)(
-                                                                 (0x1000U 
+                                                                 (0x1000ULL 
                                                                   == 
-                                                                  (0x7000U 
-                                                                   & vlSelf->instr_i))))) 
+                                                                  (0x7000ULL 
+                                                                   & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                                    | ((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                       & (IData)(
-                                                                (0x40000000U 
+                                                                (0x40000000ULL 
                                                                  == 
-                                                                 (0x40007000U 
-                                                                  & vlSelf->instr_i))))) 
+                                                                 (0x40007000ULL 
+                                                                  & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                                   | ((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
-                                                     & (~ 
-                                                        (vlSelf->instr_i 
-                                                         >> 0xeU)))) 
+                                                     & (~ (IData)(
+                                                                  (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                   >> 0xeU))))) 
                                                  | ((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
                                                     & (IData)(
-                                                              (0x3000U 
+                                                              (0x3000ULL 
                                                                == 
-                                                               (0x3000U 
-                                                                & vlSelf->instr_i))))) 
+                                                               (0x3000ULL 
+                                                                & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                                 | (IData)(vlSelf->top__DOT__control0__DOT__lui)) 
                                                << 3U) 
                                               | (((((((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                       | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                      & (IData)(
-                                                               (0x5000U 
+                                                               (0x5000ULL 
                                                                 == 
-                                                                (0x40007000U 
-                                                                 & vlSelf->instr_i)))) 
+                                                                (0x40007000ULL 
+                                                                 & vlSelf->top__DOT__instrmemory0__DOT__rdata)))) 
                                                     | (((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                         | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                        & (IData)(
-                                                                 (0x6000U 
+                                                                 (0x6000ULL 
                                                                   == 
-                                                                  (0x6000U 
-                                                                   & vlSelf->instr_i))))) 
+                                                                  (0x6000ULL 
+                                                                   & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                                    | (IData)(vlSelf->top__DOT__control0__DOT__lui)) 
                                                   << 2U) 
                                                  | ((((((((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                           | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                          & (IData)(
-                                                                   (0x2000U 
+                                                                   (0x2000ULL 
                                                                     == 
-                                                                    (0x6000U 
-                                                                     & vlSelf->instr_i)))) 
+                                                                    (0x6000ULL 
+                                                                     & vlSelf->top__DOT__instrmemory0__DOT__rdata)))) 
                                                         | (((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                             | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                            & (IData)(
-                                                                     (0x6000U 
+                                                                     (0x6000ULL 
                                                                       == 
-                                                                      (0x7000U 
-                                                                       & vlSelf->instr_i))))) 
+                                                                      (0x7000ULL 
+                                                                       & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                                        | ((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
                                                           & (IData)(
-                                                                    (0x4000U 
+                                                                    (0x4000ULL 
                                                                      == 
-                                                                     (0x5000U 
-                                                                      & vlSelf->instr_i))))) 
+                                                                     (0x5000ULL 
+                                                                      & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                                       | (IData)(vlSelf->top__DOT__control0__DOT__lui)) 
                                                      << 1U) 
                                                     | (((((IData)(vlSelf->top__DOT__control0__DOT__Rtype) 
                                                           | (IData)(vlSelf->top__DOT__control0__DOT__ItypeALU)) 
                                                          & (IData)(
-                                                                   (0x3000U 
+                                                                   (0x3000ULL 
                                                                     == 
-                                                                    (0x7000U 
-                                                                     & vlSelf->instr_i)))) 
+                                                                    (0x7000ULL 
+                                                                     & vlSelf->top__DOT__instrmemory0__DOT__rdata)))) 
                                                         | ((IData)(vlSelf->top__DOT__control0__DOT__Btype) 
                                                            & (IData)(
-                                                                     (0x6000U 
+                                                                     (0x6000ULL 
                                                                       == 
-                                                                      (0x7000U 
-                                                                       & vlSelf->instr_i))))) 
+                                                                      (0x7000ULL 
+                                                                       & vlSelf->top__DOT__instrmemory0__DOT__rdata))))) 
                                                        | (IData)(vlSelf->top__DOT__control0__DOT__lui)))))));
-    vlSelf->top__DOT__pcnext0__DOT__offsetA = ((IData)(vlSelf->top__DOT__control0__DOT__jalr)
-                                                ? vlSelf->top__DOT__busA
-                                                : vlSelf->pc);
-    vlSelf->top__DOT__ALU_src1 = ((((IData)(vlSelf->top__DOT__control0__DOT__jal) 
-                                    | (IData)(vlSelf->top__DOT__control0__DOT__jalr)) 
-                                   | (IData)(vlSelf->top__DOT__control0__DOT__auipc))
-                                   ? vlSelf->pc : vlSelf->top__DOT__busA);
     vlSelf->top__DOT__imm = ((0U == (IData)(vlSelf->top__DOT__ExtOp))
                               ? (((- (QData)((IData)(
-                                                     (vlSelf->instr_i 
-                                                      >> 0x1fU)))) 
+                                                     (1U 
+                                                      & (IData)(
+                                                                (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                 >> 0x1fU)))))) 
                                   << 0xcU) | (QData)((IData)(
-                                                             (vlSelf->instr_i 
-                                                              >> 0x14U))))
+                                                             (0xfffU 
+                                                              & (IData)(
+                                                                        (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                         >> 0x14U))))))
                               : ((1U == (IData)(vlSelf->top__DOT__ExtOp))
                                   ? (((QData)((IData)(
                                                       (- (IData)(
-                                                                 (vlSelf->instr_i 
-                                                                  >> 0x1fU))))) 
+                                                                 (1U 
+                                                                  & (IData)(
+                                                                            (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                             >> 0x1fU))))))) 
                                       << 0x20U) | (QData)((IData)(
-                                                                  (0xfffff000U 
-                                                                   & vlSelf->instr_i))))
+                                                                  ((IData)(
+                                                                           (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                            >> 0xcU)) 
+                                                                   << 0xcU))))
                                   : ((2U == (IData)(vlSelf->top__DOT__ExtOp))
                                       ? (((- (QData)((IData)(
-                                                             (vlSelf->instr_i 
-                                                              >> 0x1fU)))) 
+                                                             (1U 
+                                                              & (IData)(
+                                                                        (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                         >> 0x1fU)))))) 
                                           << 0xcU) 
                                          | (QData)((IData)(
                                                            ((0xfe0U 
-                                                             & (vlSelf->instr_i 
-                                                                >> 0x14U)) 
+                                                             & ((IData)(
+                                                                        (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                         >> 0x19U)) 
+                                                                << 5U)) 
                                                             | (0x1fU 
-                                                               & (vlSelf->instr_i 
-                                                                  >> 7U))))))
+                                                               & (IData)(
+                                                                         (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                          >> 7U)))))))
                                       : ((3U == (IData)(vlSelf->top__DOT__ExtOp))
                                           ? (((- (QData)((IData)(
-                                                                 (vlSelf->instr_i 
-                                                                  >> 0x1fU)))) 
+                                                                 (1U 
+                                                                  & (IData)(
+                                                                            (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                             >> 0x1fU)))))) 
                                               << 0xcU) 
                                              | (QData)((IData)(
                                                                ((0x800U 
-                                                                 & (vlSelf->instr_i 
-                                                                    << 4U)) 
+                                                                 & ((IData)(
+                                                                            (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                             >> 7U)) 
+                                                                    << 0xbU)) 
                                                                 | ((0x7e0U 
-                                                                    & (vlSelf->instr_i 
-                                                                       >> 0x14U)) 
+                                                                    & ((IData)(
+                                                                               (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                                >> 0x19U)) 
+                                                                       << 5U)) 
                                                                    | (0x1eU 
-                                                                      & (vlSelf->instr_i 
-                                                                         >> 7U)))))))
+                                                                      & ((IData)(
+                                                                                (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                                >> 8U)) 
+                                                                         << 1U)))))))
                                           : ((4U == (IData)(vlSelf->top__DOT__ExtOp))
                                               ? (((- (QData)((IData)(
-                                                                     (vlSelf->instr_i 
-                                                                      >> 0x1fU)))) 
+                                                                     (1U 
+                                                                      & (IData)(
+                                                                                (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                                >> 0x1fU)))))) 
                                                   << 0x14U) 
                                                  | (QData)((IData)(
                                                                    ((0xff000U 
-                                                                     & vlSelf->instr_i) 
+                                                                     & ((IData)(
+                                                                                (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                                >> 0xcU)) 
+                                                                        << 0xcU)) 
                                                                     | ((0x800U 
-                                                                        & (vlSelf->instr_i 
-                                                                           >> 9U)) 
+                                                                        & ((IData)(
+                                                                                (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                                >> 0x14U)) 
+                                                                           << 0xbU)) 
                                                                        | (0x7feU 
-                                                                          & (vlSelf->instr_i 
-                                                                             >> 0x14U)))))))
+                                                                          & ((IData)(
+                                                                                (vlSelf->top__DOT__instrmemory0__DOT__rdata 
+                                                                                >> 0x15U)) 
+                                                                             << 1U)))))))
                                               : 0ULL)))));
     vlSelf->top__DOT__ALU0__DOT__ALUctr0__DOT__and_result 
         = (IData)((0x14U == (0x3fU & (IData)(vlSelf->top__DOT__ALUctr))));
@@ -563,7 +600,7 @@ void Vtop___024root___eval_settle(Vtop___024root* vlSelf) {
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___eval_settle\n"); );
     // Body
-    Vtop___024root___settle__TOP__3(vlSelf);
+    Vtop___024root___settle__TOP__4(vlSelf);
     vlSelf->__Vm_traceActivity[3U] = 1U;
     vlSelf->__Vm_traceActivity[2U] = 1U;
     vlSelf->__Vm_traceActivity[1U] = 1U;
@@ -583,7 +620,7 @@ void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     // Body
     vlSelf->clk = VL_RAND_RESET_I(1);
     vlSelf->rst = VL_RAND_RESET_I(1);
-    vlSelf->instr_i = VL_RAND_RESET_I(32);
+    vlSelf->instr = VL_RAND_RESET_I(32);
     vlSelf->pc = VL_RAND_RESET_Q(64);
     vlSelf->top__DOT__busA = VL_RAND_RESET_Q(64);
     vlSelf->top__DOT__busB = VL_RAND_RESET_Q(64);
@@ -599,6 +636,7 @@ void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->top__DOT__ALU_src2 = VL_RAND_RESET_Q(64);
     vlSelf->top__DOT__ALU_Result = VL_RAND_RESET_Q(64);
     vlSelf->top__DOT__DataOut = VL_RAND_RESET_Q(64);
+    vlSelf->top__DOT__instrmemory0__DOT__rdata = VL_RAND_RESET_Q(64);
     for (int __Vi0=0; __Vi0<32; ++__Vi0) {
         vlSelf->top__DOT__registers0__DOT__rf[__Vi0] = VL_RAND_RESET_Q(64);
     }
@@ -630,6 +668,7 @@ void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     for (int __Vi0=0; __Vi0<32; ++__Vi0) {
         vlSelf->top__DOT__datamemory0__DOT__mem[__Vi0] = VL_RAND_RESET_Q(64);
     }
+    vlSelf->__Vtask_pmem_read__0__rdata = 0;
     for (int __Vi0=0; __Vi0<4; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = VL_RAND_RESET_I(1);
     }
